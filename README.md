@@ -6,7 +6,7 @@
 
 ### Install
 - Clone repo and cd into project
-- Run `cp config-sample.js config.js`
+- Run `cp config-sample.js config.js; mkdir data`
 - Add ssh and Azure blob storage credentials
 - Run npm install
 - Run node main.js
