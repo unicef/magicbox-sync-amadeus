@@ -16,7 +16,7 @@ collections.get_collection_names()
     containers.create_storage_containers(list)
     .then(value => {
       files.download_collection_upload_blob(value)
-      .catch(function(err) {
+      .catch(err => {
         console.log(err);
       })
       .then(function() {
