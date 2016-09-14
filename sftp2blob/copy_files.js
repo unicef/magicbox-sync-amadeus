@@ -18,7 +18,7 @@ var logger = require('./logger');
  * @param{String} local_path - Path to file
  * @return{Promise} Fulfilled with result of azure upload
  */
-function updload_blob_and_destroy_file(col, filename, local_path) {
+function upload_blob_and_destroy_file(col, filename, local_path) {
   console.log('Begin store to blob:', col, filename);
   return new Promise(function(resolve, reject) {
     blobSvc.createBlockBlobFromLocalFile(
@@ -54,7 +54,7 @@ function download_file_and_add_blob(col, filename) {
     }, local_path + filename, function(err) {
       logger.log.file_downloaded_from_sftp(filename, err);
       if (!err) {
-        updload_blob_and_destroy_file(col, filename, local_path).then(function(value) {
+        upload_blob_and_destroy_file(col, filename, local_path).then(function(value) {
           resolve(value);
         });
       }
@@ -120,7 +120,11 @@ exports.download_collection_upload_blob = function(list) {
       // Create direcotry in local storage for collection if it doesn't already exist.
       var dir = local_dir + '/' + col;
       if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir);
+        fs.mkdir(dir, function(err) {
+          if (err) {
+            throw err;
+          }
+        });
       }
       promises.push(download_col_upload_blob(col));
     });
