@@ -1,6 +1,6 @@
-var collections = require('./lib/collections');
-var containers = require('./lib/containers');
-var files = require('./lib/files');
+var collections = require('./sftp2blob/get_collection_names');
+var containers = require('./sftp2blob/create_containers');
+var files = require('./sftp2blob/copy_files');
 
 /**
  * - Fetches names of collections on sftp (Each directory in root is a collection).

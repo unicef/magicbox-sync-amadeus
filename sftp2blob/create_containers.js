@@ -1,4 +1,4 @@
-var container = require('./container');
+var container = require('./create_container');
 
 /**
  * Creates a storage container for each collection if doesn't already exist.
