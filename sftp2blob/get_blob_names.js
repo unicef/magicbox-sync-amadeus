@@ -16,7 +16,7 @@ exports.get_blobs_list = function(col) {
       if (!err) {
         resolve(result.entries.map(entry => entry.name));
       } else {
-        // logger.log('error', {error: err});
+        return reject(err);
       }
     });
   });

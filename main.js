@@ -15,7 +15,11 @@ collections.get_collection_names()
   .then(list => {
     containers.create_storage_containers(list)
     .then(value => {
-      files.download_collection_upload_blob(value).then(function() {
+      files.download_collection_upload_blob(value)
+      .catch(function(err) {
+        console.log(err);
+      })
+      .then(function() {
         console.log('Done!');
       });
     });

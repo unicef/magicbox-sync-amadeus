@@ -10,7 +10,7 @@ exports.get_file_names = function(col) {
       conn.sftp(function(err, sftp) {
         if (err) throw err;
         sftp.readdir(remotePathToList, function(err, list) {
-          if (err) throw err;
+          if (err) return reject(err);
           resolve(list);
           // Do not forget to close the connection, otherwise you'll get troubles
           conn.end();

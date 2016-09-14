@@ -16,10 +16,10 @@ exports.get_collection_names = function() {
     conn.on('ready', function() {
       conn.sftp(function(err, sftp) {
         // Need to log this
-        if (err) throw err;
+        if (err) return reject(err);
         // Each directory has collection name
         sftp.readdir(remotePathToList, function(err, list) {
-          if (err) throw err;
+          if (err) return reject(err);
           resolve(list);
           // Do not forget to close the connection, otherwise you'll get troubles
           conn.end();

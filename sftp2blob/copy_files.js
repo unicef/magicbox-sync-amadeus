@@ -8,7 +8,6 @@ var connSettings = config.connectionSettings;
 var storage_account = config.azure.storage_account;
 var blobSvc = azure.createBlobService(storage_account, azure_key);
 var local_dir = config.localStorageDir;
-var logger = require('./logger');
 
 /**
  * Uploads data file as blob.
@@ -26,10 +25,11 @@ function upload_blob_and_destroy_file(col, filename, local_path) {
       filename,
       local_dir + '/' + col + '/' + filename,
       function(err, result, response) {
-        logger.log.file_uploaded_to_blob(col, filename, err);
         // TODO: Destroy local file.
         if (!err) {
           resolve(result);
+        } else {
+          return reject(err);
         }
       });
   });
@@ -52,11 +52,12 @@ function download_file_and_add_blob(col, filename) {
       password: connSettings.password,
       path: config.remotePathToList + '/' + col + '/' + filename
     }, local_path + filename, function(err) {
-      logger.log.file_downloaded_from_sftp(filename, err);
       if (!err) {
         upload_blob_and_destroy_file(col, filename, local_path).then(function(value) {
           resolve(value);
         });
+      } else {
+        return reject(err);
       }
     });
   });
@@ -122,7 +123,7 @@ exports.download_collection_upload_blob = function(list) {
       if (!fs.existsSync(dir)) {
         fs.mkdir(dir, function(err) {
           if (err) {
-            throw err;
+            return reject(err);
           }
         });
       }
