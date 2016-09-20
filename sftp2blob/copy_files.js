@@ -89,8 +89,10 @@ function download_col_upload_blob(col) {
   // Compare files in sftp collection and blob storage.
   // Download files in sftp and not in blob
   return new Promise(function(resolve, reject) {
-    collection.get_file_names(col).then(function(files) {
-      blob.get_blobs_list(col).then(function(blobs) {
+    collection.get_file_names(col)
+    .then(function(files) {
+      blob.get_blobs_list(col)
+      .then(function(blobs) {
         var file_names = files.map(file => file.filename);
         var new_files = file_names.filter(function(e) {
           return blobs.indexOf(e) === -1;
