@@ -1,5 +1,6 @@
 var azure = require('azure-storage');
 var blob = require('./get_blob_names');
+var bluebird = require('bluebird');
 var collection = require('./get_collection_file_names');
 var fs = require('fs');
 var config = require('../config');
@@ -71,12 +72,10 @@ function download_file_and_add_blob(col, filename) {
  */
 function download_files_and_add_blobs(col, file_names) {
   return new Promise(function(resolve, reject) {
-    file_names.forEach(function(filename) {
-      download_file_and_add_blob(col, filename)
-      .then(
-        value => resolve()
-      );
-    });
+    bluebird.map(file_names, function(filename){
+      return download_file_and_add_blob(col, filename);
+    }, {concurrency: 1}).catch(function(err) { return reject(err); })
+    .then(function() { resolve(); });
   });
 }
 
@@ -119,7 +118,7 @@ exports.download_collection_upload_blob = function(list) {
   return new Promise(function(resolve, reject) {
     var collections = list.map(col => col.name);
     var promises = [];
-    collections.forEach(function(col) {
+    bluebird.map(collections, function(col){
       // Create direcotry in local storage for collection if it doesn't already exist.
       var dir = local_dir + '/' + col;
       if (!fs.existsSync(dir)) {
@@ -129,10 +128,9 @@ exports.download_collection_upload_blob = function(list) {
           }
         });
       }
-      promises.push(download_col_upload_blob(col));
-    });
-    Promise.all(promises).then(function() {
-      resolve();
-    });
+      return download_col_upload_blob(col)
+    }, {concurrency: 1})
+    .catch(function(err){ return reject(err) })
+    .then(function(){ resolve();});
   });
 };
