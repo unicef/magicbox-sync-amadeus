@@ -12,15 +12,12 @@ var files = require('./sftp2blob/copy_files');
  * @return{Promise} Fulfilled with a value suitable for use as a condition
  */
 collections.get_collection_names()
+  .catch(err => { console.log(err);})
   .then(list => {
     containers.create_storage_containers(list)
     .then(value => {
       files.download_collection_upload_blob(value)
-      .catch(err => {
-        console.log(err);
-      })
-      .then(function() {
-        console.log('Done!');
-      });
+      .catch(err => { console.log(err);})
+      .then(function() {console.log('Done!');});
     });
   });
