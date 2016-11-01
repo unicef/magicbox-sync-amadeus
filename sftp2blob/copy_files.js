@@ -20,22 +20,29 @@ var local_dir = config.localStorageDir;
  */
 function upload_blob_and_destroy_file(col, filename, local_path) {
   console.log('Begin store to blob:', col, filename);
+  var whole_path = local_dir + '/' + col + '/' + filename;
   return new Promise(function(resolve, reject) {
     blobSvc.createBlockBlobFromLocalFile(
       col,
       filename,
-      local_dir + '/' + col + '/' + filename,
+      whole_path,
       function(err, result, response) {
         // TODO: Destroy local file.
         if (!err) {
-          resolve(result);
+          fs.exists(whole_path, function(exists) {
+            if (exists) {
+	      console.log('Unlinking:', whole_path);
+              fs.unlink(whole_path);
+            } else {
+              console.log('File not found, so not deleting.');
+            }
+          });
         } else {
           return reject(err);
         }
       });
   });
 }
-
 /**
  * Downloads file from sftp server
  * @param{String} col - Collection name
