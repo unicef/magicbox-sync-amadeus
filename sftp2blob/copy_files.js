@@ -31,8 +31,9 @@ function upload_blob_and_destroy_file(col, filename, local_path) {
         if (!err) {
           fs.exists(whole_path, function(exists) {
             if (exists) {
-	      console.log('Unlinking:', whole_path);
+	            console.log('Unlinking:', whole_path);
               fs.unlink(whole_path);
+              resolve();
             } else {
               console.log('File not found, so not deleting.');
             }
