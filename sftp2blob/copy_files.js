@@ -29,14 +29,12 @@ function upload_blob_and_destroy_file(col, filename, local_path) {
       function(err, result, response) {
         // TODO: Destroy local file.
         if (!err) {
-          fs.exists(whole_path, function(exists) {
-            if (exists) {
-	            console.log('Unlinking:', whole_path);
-              fs.unlink(whole_path);
-              resolve();
-            } else {
-              console.log('File not found, so not deleting.');
+          fs.unlink(whole_path, function(err) {
+            if (err) {
+              return reject(err);
             }
+            resolve();
+            console.log('file deleted successfully');
           });
         } else {
           return reject(err);
@@ -62,7 +60,9 @@ function download_file_and_add_blob(col, filename) {
       path: config.remotePathToList + '/' + col + '/' + filename
     }, local_path + filename, function(err) {
       if (!err) {
-        upload_blob_and_destroy_file(col, filename, local_path).then(function(value) {
+        upload_blob_and_destroy_file(col, filename, local_path)
+        .catch(function(err) { return reject(err);})
+        .then(function(value) {
           resolve(value);
         });
       } else {
@@ -105,7 +105,9 @@ function download_col_upload_blob(col) {
           return blobs.indexOf(e) === -1;
         });
         if (new_files.length > 0) {
-          download_files_and_add_blobs(col, new_files).then(function() {
+          download_files_and_add_blobs(col, new_files)
+          .catch(function(err) { return reject(err);})
+          .then(function() {
             resolve();
           });
         } else {
@@ -125,8 +127,7 @@ function download_col_upload_blob(col) {
 exports.download_collection_upload_blob = function(list) {
   return new Promise(function(resolve, reject) {
     var collections = list.map(col => col.name);
-    var promises = [];
-    bluebird.map(collections, function(col){
+    bluebird.map(collections, function(col) {
       // Create direcotry in local storage for collection if it doesn't already exist.
       var dir = local_dir + '/' + col;
       if (!fs.existsSync(dir)) {
@@ -136,9 +137,9 @@ exports.download_collection_upload_blob = function(list) {
           }
         });
       }
-      return download_col_upload_blob(col)
+      return download_col_upload_blob(col);
     }, {concurrency: 1})
-    .catch(function(err){ return reject(err) })
-    .then(function(){ resolve();});
+    .catch(function(err) { return reject(err);})
+    .then(function() { resolve();});
   });
 };
