@@ -27,14 +27,14 @@ function upload_blob_and_destroy_file(col, filename, local_path) {
       filename,
       whole_path,
       function(err, result, response) {
-        // TODO: Destroy local file.
         if (!err) {
+          console.log(filename, 'uploaded!');
           fs.unlink(whole_path, function(err) {
             if (err) {
               return reject(err);
             }
-            resolve();
             console.log('file deleted successfully');
+            resolve();
           });
         } else {
           return reject(err);
@@ -60,6 +60,7 @@ function download_file_and_add_blob(col, filename) {
       path: config.remotePathToList + '/' + col + '/' + filename
     }, local_path + filename, function(err) {
       if (!err) {
+        console.log(filename, 'downloaded!');
         upload_blob_and_destroy_file(col, filename, local_path)
         .catch(function(err) { return reject(err);})
         .then(function(value) {
@@ -80,10 +81,13 @@ function download_file_and_add_blob(col, filename) {
  */
 function download_files_and_add_blobs(col, file_names) {
   return new Promise(function(resolve, reject) {
-    bluebird.map(file_names, function(filename){
+    bluebird.map(file_names, function(filename) {
       return download_file_and_add_blob(col, filename);
     }, {concurrency: 1}).catch(function(err) { return reject(err); })
-    .then(function() { resolve(); });
+    .then(function() {
+      console.log(col, 'processed');
+      resolve();
+    });
   });
 }
 
