@@ -1,5 +1,5 @@
 ## sftp2blob (Azure)
-- This is a component of [MagicBox](https://github.com/unicef/magicbox)
+- This is a component of [MagicBox](https://github.com/unicef/magicbox/wiki)
 - Fetches names of collections on sftp (Each directory in root is a collection).
 - Creates a container in storage account (noted in config.js) for each collection if it doesn't already exist.
 - Compares files in blobs with files in sftp collection.
