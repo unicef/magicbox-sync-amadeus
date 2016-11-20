@@ -83,7 +83,8 @@ function download_files_and_add_blobs(col, file_names) {
   return new Promise(function(resolve, reject) {
     bluebird.map(file_names, function(filename) {
       return download_file_and_add_blob(col, filename);
-    }, {concurrency: 1}).catch(function(err) { return reject(err); })
+    }, {concurrency: 1})
+    .catch(function(err) { return reject(err); })
     .then(function() {
       console.log(col, 'processed');
       resolve();
