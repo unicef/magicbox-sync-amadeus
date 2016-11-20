@@ -10,3 +10,6 @@
 - Add ssh and Azure blob storage credentials to config
 - Run npm install
 - Run node main.js
+
+### Run
+    nohup node main.js  nohup.out 2>&1&
