@@ -1,5 +1,6 @@
-## sftp2blob (Azure)
-### Downloads raw mobility data from amadeus and stores to Azure blob. This data will be [aggregated by admin](https://github.com/unicef/aggregate_airport_mobility_by_admin).
+## Amadeus Fetcher
+
+### Downloads raw mobility data from amadeus sftp and stores to Azure blob. This data will be [aggregated by admin](https://github.com/unicef/aggregate_airport_mobility_by_admin).
 
 - This is a component of [MagicBox](https://github.com/unicef/magicbox/wiki)
 - Fetches names of collections on sftp (Each directory in root is a collection).
