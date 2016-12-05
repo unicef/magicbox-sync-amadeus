@@ -1,4 +1,6 @@
 ## sftp2blob (Azure)
+### Downloads raw mobility data from amadeus and stores to Azure blob. This data will be [aggregated by admin](https://github.com/unicef/aggregate_airport_mobility_by_admin).
+
 - This is a component of [MagicBox](https://github.com/unicef/magicbox/wiki)
 - Fetches names of collections on sftp (Each directory in root is a collection).
 - Creates a container in storage account (noted in config.js) for each collection if it doesn't already exist.
@@ -13,4 +15,7 @@
 - Run node main.js
 
 ### Run
-    nohup node main.js  nohup.out 2>&1&
+    nohup node main.js nohup.out 2>&1&
+
+### TODO
+- Create cron job to run weekly
