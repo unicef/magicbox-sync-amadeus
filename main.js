@@ -14,6 +14,8 @@ var files = require('./sftp2blob/copy_files');
 collections.get_collection_names()
   .catch(err => { console.log(err);})
   .then(list => {
+    // Filter out sample files
+    list = list.filter(function(e) {return !e.filename.match(/sample/i); });
     containers.create_storage_containers(list)
     .then(value => {
       files.download_collection_upload_blob(value)
