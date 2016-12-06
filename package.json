@@ -9,8 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "apache-spark-node": "^0.3.3",
+    "async": "^2.1.4",
     "azure-storage": "~1.2.0",
     "bluebird": "^3.4.6",
+    "exec": "^0.2.1",
     "scp2": "^0.5.0",
     "ssh2": "^0.5.0"
   },
