@@ -1,4 +1,6 @@
+var airport_to_admin = require('../lib/airport_to_admin');
 var azure = require('azure-storage');
+var async = require('async');
 var blob = require('./get_blob_names');
 var bluebird = require('bluebird');
 var collection = require('./get_collection_file_names');
@@ -61,18 +63,36 @@ function download_file_and_add_blob(col, filename) {
     }, local_path + filename, function(err) {
       if (!err) {
         console.log(filename, 'downloaded!');
+        async.waterfall([
+          function(callback) {
+            console.log('About to make COPY!!');
+            airport_to_admin.create_copy_by_admin(col, filename)
+            .catch(function(err) {
+              return reject(err);
+            })
+            .then(function() {
+              callback(null);
+            });
+          }
+
+        ], function(err, result) {
+          if (err) {
+            console.log('done with waterfall')
+            return reject(err);
+          }
+        });
         upload_blob_and_destroy_file(col, filename, local_path)
         .catch(function(err) { return reject(err);})
         .then(function(value) {
           resolve(value);
         });
       } else {
+	console.log(err);
         return reject(err);
       }
     });
   });
 }
-
 /**
  * Downloads file from sftp server
  * @param{String} col - Collection name
