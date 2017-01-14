@@ -77,7 +77,7 @@ function download_file_and_add_blob(col, filename) {
 
         ], function(err, result) {
           if (err) {
-            console.log('done with waterfall')
+            console.log('done with waterfall');
             return reject(err);
           }
         });
@@ -87,7 +87,7 @@ function download_file_and_add_blob(col, filename) {
           resolve(value);
         });
       } else {
-	console.log(err);
+        console.log(err);
         return reject(err);
       }
     });
