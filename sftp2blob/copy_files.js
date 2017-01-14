@@ -65,14 +65,17 @@ function download_file_and_add_blob(col, filename) {
         console.log(filename, 'downloaded!');
         async.waterfall([
           function(callback) {
-            console.log('About to make COPY!!');
-            airport_to_admin.create_copy_by_admin(col, filename)
-            .catch(function(err) {
-              return reject(err);
-            })
-            .then(function() {
-              callback(null);
-            });
+            console.log('Not sure why I was unzipping to create admin version');
+            callback(null);
+            //console.log('About to make COPY!!');
+            //airport_to_admin.create_copy_by_admin(col, filename)
+            //.catch(function(err) {
+            //  return reject(err);
+            //})
+            //.then(function(result) {
+            //  console.log(result);
+            //  callback(null);
+            //});
           }
 
         ], function(err, result) {
