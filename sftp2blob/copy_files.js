@@ -1,4 +1,4 @@
-var airport_to_admin = require('../lib/airport_to_admin');
+// var airport_to_admin = require('../lib/airport_to_admin');
 var azure = require('azure-storage');
 var async = require('async');
 var blob = require('./get_blob_names');
